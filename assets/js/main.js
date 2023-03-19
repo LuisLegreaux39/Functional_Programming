@@ -20,7 +20,10 @@ const description = $("#description"),
   calories = $("#calories"),
   carbs = $("#carbs"),
   protein = $("#protein"),
-  table = $("#items");
+  table = $("#items"),
+  total_calories = $("#total-calories"),
+  total_carbs = $("#total-carbs"),
+  total_protein = $("#total-protein");
 
 const currentInputs = [description, calories, carbs, protein];
 
@@ -155,10 +158,32 @@ function addOneElementToList(list, ...inputs) {
   return copiedList;
 }
 
+function calculateTotal() {
+  const total = list.reduce(
+    (acc, curr) => {
+      return {
+        calories: parseFloat(acc.calories) + parseFloat(curr.calories),
+        protein: parseFloat(acc.protein) + parseFloat(curr.protein),
+        carbs: parseFloat(acc.carbs) + parseFloat(curr.carbs),
+      };
+    },
+    {
+      calories: 0,
+      protein: 0,
+      carbs: 0,
+    }
+  );
+
+  total_calories.text(total.calories);
+  total_carbs.text(total.carbs);
+  total_protein.text(total.protein);
+}
+
 function deleteElement(id) {
   list = list.filter((item) => item.id !== id);
   const currentRoads = list.map(compose(rowElement, buildCells));
   table.html(currentRoads.join(""));
+  calculateTotal();
 }
 
 function submit() {
@@ -169,6 +194,6 @@ function submit() {
     clearInputs(...currentInputs);
     const newRowToAdd = list.map(compose(rowElement, buildCells));
     table.html(newRowToAdd.join(""));
-    console.log(list);
+    calculateTotal();
   }
 }
