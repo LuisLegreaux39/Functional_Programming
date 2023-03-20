@@ -86,7 +86,7 @@ Static class for Html Generation made using functional programming as base and k
 
 ### Explanation of HTML Generator
 
-``` createTag ``` method is made to to return 3 functions witch will be building the strings of the markup and accepting arguments as ```tag``` which will be the tag key name, ``` selfClosing``` to close the tag if true ```<[tag] /> ```, ```attr``` which will be the string of attributes if will have on the scope of the tags   ```<[tag] attr_name="attr_value"></[tag]> ``` and the ```content``` inside the tags ```<[tag] attr_name="attr_value">[content]</[tag]> ```.
+```createTag ``` method is made to to return 3 functions witch will be building the strings of the markup and accepting arguments as ```tag``` which will be the tag key name, ```selfClosing``` to close the tag if true ```<[tag] /> ```, ```attr``` which will be the string of attributes if will have on the scope of the tags   ```<[tag] attr_name="attr_value"></[tag]> ``` and the ```content``` inside the tags ```<[tag] attr_name="attr_value">[content]</[tag]> ```.
 
 Ex:
 ```
@@ -114,3 +114,82 @@ HTMLGenerator.createTag("button")(
     })
   )('my_button'); // <button  type="button" class="btn btn-danger" onclick="deleteElement()">my_button</button>
 ``` 
+
+Class Use Example:
+```
+const payload = {
+    html: {
+        attr: {
+            lang: "en"
+        },
+        child: [
+            {
+                head: {
+                    child: [
+                        {
+                            meta: {
+                                selfClosing: true,
+                                attr: {
+                                    charset: "UTF=8"
+                                },
+                            }
+                        },
+                        {
+                            meta: {
+                                selfClosing: true,
+                                attr: {
+                                    "http-equiv": "X-UA-Compatible",
+                                    content: "IE=edge"
+                                },
+                            }
+                        },
+                        {
+                            meta: {
+                                selfClosing: true,
+                                attr: {
+                                    "name": "viewport",
+                                    content: "width=device-width,  initial-scale=1.0"
+                                },
+                            }
+                        },
+                        {
+                            title: {
+                                content: "Document"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                body: {
+                    child:[{
+                        h1:{
+                            content:'hola mundo'
+                        }
+                    }]
+                }
+            }
+        ]
+    },
+
+}
+
+HTMLGenerator._render(payload)()
+
+```
+
+Result:
+```
+<html lang="en" >
+   <head>
+      <meta charset="UTF=8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width,  initial-scale=1.0" />
+      <title>Document</title>
+   </head>
+   <body>
+      <h1>hola mundo</h1>
+   </body>
+</html>
+
+```
